@@ -1,0 +1,116 @@
+---
+title: "TimeSeries-Coursera"
+author: "IsmaelBastos"
+date: "21/07/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Histogram
+```{r}
+small.size.dataset=c(91,49,76,112,97,42,70, 100, 8, 112, 95, 90, 78, 62, 56, 94, 65, 58, 109, 70, 109, 91, 71, 76, 68, 62, 134, 57, 83, 66)
+hist(small.size.dataset, col='red', breaks=10, fre=F)
+lines(density(small.size.dataset), lwd=2, col='purple')
+```
+
+### Scatterplot 
+
+```{r}
+set.seed=2016
+Test_1_scores=round(rnorm(50,78,10))
+Test_2_scores=round(rnorm(50,78,10))
+plot(Test_1_scores, Test_2_scores)
+```
+
+### Time Series
+
+```{r}
+library(astsa)
+
+```
+## Weak Stationary Series
+
+Be stationary implies that the series will not have systematic change in the mean, e.g, no trends. No systematic change in variation.
+
+The properties of one sections of the data are much like the properties of the other sections of the data.
+
+## Autocovariance Functions
+
+### Covariance
+
+If X and Y are two random variables, covariance emasures the linear dependence between two random variables
+\begin{equation}
+Cov(X,Y) = E[(X-E[X])(Y-E[Y])] = E[XY]-E[X]E[Y]
+\end{equation}
+
+### Autocovariance Function
+
+\begin{equation}
+\gamma(s,t) = Cov(X_s, X_t) 
+\gamma(t,t) = Var(X_t)
+\gamma_k = \gamma(t, t+k) \approx c_k
+\end{equation}
+
+### Autocovariance Coefficients
+
+\begin{equation}
+c_k = \frac{\sum_{t=1}^{N-k}(x_t-\bar{x})(x_{t+k}-\bar{x})}{N}
+\end{equation}
+
+in R we use the ```acf(time_series, type='covariance')``` command.
+
+```{r}
+purely_random_process = ts(rnorm(100))
+(acf(purely_random_process, type='covariance'))
+# The brackets suround the function is used to print the values and not just the plot
+```
+
+### Autocorrelation Function
+
+We assume weak stationary
+The autocorrelation coefficient between $X_t$ and $X_{t+k}$ is defined to be:
+
+$$-1 \leq \rho_k = \frac{\gamma_k}{\gamma_0} \leq 1$$
+
+The estimation of $\rho_k$ is $r_k = \frac{c_k}{c_0}$
+
+$r_0 = \frac{c_0}{c_0} = 1$
+
+Example:
+```{r}
+(acf(purely_random_process))
+```
+
+### Random Walk
+
+![](randon_walk.PNG)
+
+Example:
+```{r}
+x = NULL
+x[1] = 0
+for(i in 2:1000){
+  x[i] = x[i-1] + rnorm(1)
+}
+random_walk=ts(x)
+plot(random_walk, main="Random Walk", xlab='Days')
+```
+
+As we can see, the random walk process is not stationary.
+
+### Removing Trend
+\begin{equation}
+X_t = X_{t-1} + Z_t \\
+X_t - X_{t-1} = Z_t \\
+\nabla Z_t = Z_t \text{is a purely random process}\\
+
+\end{equation}
+
+```{r}
+plot(diff(random_walk))
+acf(diff(random_walk))
+```
+
