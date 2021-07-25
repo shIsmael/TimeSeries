@@ -114,3 +114,35 @@ plot(diff(random_walk))
 acf(diff(random_walk))
 ```
 
+
+### Moving Average Process
+
+#### Simulating a MA(2) process
+
+\begin{gather*}
+X_t = Z_t +\theta_1Z_{t-1} + \theta_2Z_{t-2} \\
+Z_i \approx Normal(\mu, \sigma^2)\\
+Z_i are i.i.d
+\end{gather*}
+
+Ex:
+\begin{gather*}
+X_t = Z_t + 0.7Z_{t-1} + 0.2Z_{t-2}\\
+Z_t \approx Normal(0,1)
+\end{gather*}
+
+```{r}
+noise = rnorm(10000)
+ma_2 = NULL
+
+for(i in 3:10000){
+  ma_2[i] = noise[i] + .7*noise[i-1] + .2*noise[i-2]
+}
+moving_average_process = ma_2[3:10000]
+moving_average_process = ts(moving_average_process)
+
+par(mfrow=c(2,1))
+plot(moving_average_process, main="A moving average process of order 2")
+acf(moving_average_process, main="Corellogram of a moving average process of order 2")
+```
+
