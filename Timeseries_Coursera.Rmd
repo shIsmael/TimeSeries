@@ -48,11 +48,11 @@ Cov(X,Y) = E[(X-E[X])(Y-E[Y])] = E[XY]-E[X]E[Y]
 
 ### Autocovariance Function
 
-\begin{equation}
-\gamma(s,t) = Cov(X_s, X_t) 
-\gamma(t,t) = Var(X_t)
+\begin{gather*}
+\gamma(s,t) = Cov(X_s, X_t) \\
+\gamma(t,t) = Var(X_t)\\
 \gamma_k = \gamma(t, t+k) \approx c_k
-\end{equation}
+\end{gather*}
 
 ### Autocovariance Coefficients
 
@@ -146,3 +146,75 @@ plot(moving_average_process, main="A moving average process of order 2")
 acf(moving_average_process, main="Corellogram of a moving average process of order 2")
 ```
 
+### Stationarity
+
+There are two kinds of stationarity, strictly stationarity and weakly stationarity.
+
+Strictly Stationarity implies that the joint distribution of random variables at time t will be equal to the joint distribution at time t+k. Perhaps, is very difficult to obtain the joint distribution of the rnadom variables, beacause sometimes the time series can have infinite random variables.
+
+Weakly Stationarity: Just assumes that the mean and the variance will still the same for each random variable.
+
+#### White Noise (is Stationary)
+
+Consider a sequence of random variables: $X_t \approx iid N(0,\sigma^2)$ 
+
+The ACF:
+
+$\gamma(t_1,t_2)=\begin{cases}
+0 \ \ \ t_1=t_2\\
+t_1 \neq t_2
+\end{cases}$
+
+#### Random Walks are not Stationary
+
+\begin{gather*}
+X_t \sim \mathcal{N}(\mu, \sigma^2)\\
+X_1 = Z_1 \\
+X_2 = X_1 + Z_2 = Z_1 + Z_2\\
+X_t = X_{t-1} + Z_t \\
+X_t = \sum_{i=1}^{t}Z_i\\ 
+\end{gather*}
+
+So,
+
+\begin{gather*}
+E[X_t] = E[\sum_{i=1}^{t}Z_i] =\sum_{i=1}^{t}E[Z_i] = t \cdot \mu \\ 
+V[X_t] = V[\sum_{i=1}^{t}Z_i] =\sum_{i=1}^{t}V[Z_i] = t \cdot \sigma^2 \\ 
+\end{gather*}
+
+* The operation with variance can be done because the variables are independent.
+
+#### Moving Average Processes are Stationary
+
+Start with IID random variables: $Z_t \sim iid(0, \sigma^2)$
+
+MA(q) process: $X_t=\beta_0Z_t + \beta_1Z_{t-1}+...+\beta_qZ_{t-1}$
+
+![](moving_average.png)
+![](moving_average_2.png)
+
+This image above is very effective, because, if we have a MA(q) process $k\leqq$ we can calculate de $Cov[X_t, X_t+k]$ by
+$\sum_{i=0}^{q-k}\beta_i\beta_{i+k} = \gamma(k)$
+
+### Backshift Operator
+
+Let $X_1,X_2,X_3....$ be a sequence of random variables, the backshift operator $B$ returns the previous state
+
+$$BX_t = X_{t-1}$$
+\begin{gather}
+B^2X_t = BBX_t = BX_{t-1}\\
+B^kX_t = X_{t-k}
+\end{gather*}
+
+Ex:
+
+#### Random Walk
+
+\begin{gather*}
+X_t = X_{t-1} +Z_t\\
+X_t = BX_t +Z_t\\
+(1-B)X_t = Z_t\\
+\phi(B)X_t = Z_t\\
+\text{where}\\
+\phi(B) = 1 - B
+\end{gather*}
